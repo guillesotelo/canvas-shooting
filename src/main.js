@@ -65,6 +65,7 @@ class Enemy {
     }
 }
 
+const friction = .99
 class Particle {
     constructor(x, y, radius, color, velocity) {
         this.x = x
@@ -87,6 +88,8 @@ class Particle {
 
     update() {
         this.draw()
+        this.velocity.x *= friction
+        this.velocity.y *= friction
         this.x = this.x + this.velocity.x
         this.y = this.y + this.velocity.y
         this.alpha -= 0.01
@@ -137,7 +140,7 @@ const animate = () => {
     player.draw()
 
     particules.forEach((particule, l) => {
-        if(particule.alpha <= 0) particules.splice(l, 1)
+        if (particule.alpha <= 0) particules.splice(l, 1)
         else particule.update()
     })
 
@@ -169,16 +172,16 @@ const animate = () => {
 
             // Projectile touches enemy
             if (dist - enemy.radius - projectile.radius < 1) {
-
+                // Explosion
                 for (let i = 0; i < 8; i++) {
                     particules.push(new Particle(
                         projectile.x,
                         projectile.y,
-                        3,
+                        Math.random() * 2,
                         enemy.color,
                         {
-                            x: Math.random() - .5,
-                            y: Math.random() - .5
+                            x: (Math.random() - .5) * (Math.random() * 5),
+                            y: (Math.random() - .5) * (Math.random() * 5),
                         }
                     ))
                 }
